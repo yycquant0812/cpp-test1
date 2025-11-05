@@ -1,20 +1,113 @@
-#include <iostream> 
-using namespace std; 
-int gcd(int, int); 
+/* ========================================
+   最大公因數 (GCD) - 遞迴實作
+   ========================================
+   最大公因數定義：
+   能同時整除兩個整數的最大正整數
 
-int main() { 
+   範例：
+   GCD(12, 8) = 4
+   因為 12 = 4×3, 8 = 4×2
+   4 是能同時整除 12 和 8 的最大數
+
+   歐幾里得演算法 (Euclidean Algorithm)：
+   GCD(m, n) = GCD(n, m mod n)
+   持續用較小的數和餘數替換，直到餘數為 0
+
+   遞迴定義：
+   GCD(m, 0) = m
+   GCD(m, n) = GCD(n, m mod n), 當 n ≠ 0
+
+   範例：GCD(48, 18)
+   GCD(48, 18) = GCD(18, 48 mod 18) = GCD(18, 12)
+   GCD(18, 12) = GCD(12, 18 mod 12) = GCD(12, 6)
+   GCD(12, 6)  = GCD(6, 12 mod 6)  = GCD(6, 0)
+   GCD(6, 0)   = 6
+
+   此程式使用「遞迴」實作
+   ======================================== */
+
+#include <iostream>
+using namespace std;
+
+// 函式原型宣告：計算最大公因數 (遞迴版本)
+int gcd(int, int);
+
+int main() {
     int m = 0;
-    int n = 0; 
-    cout << "��J��ơG"; 
-    cin >> m >> n; 
-    cout << "GCD: " 
-         << gcd(m, n) << endl; 
-    return 0; 
-} 
+    int n = 0;
 
-int gcd(int m, int n) { 
-    if(n == 0) 
-        return m; 
-    else 
+    // 提示使用者輸入兩個整數
+    cout << "輸入兩數：";
+    cin >> m >> n;
+
+    // 呼叫 GCD 遞迴函式並輸出結果
+    cout << "GCD: " << gcd(m, n) << endl;
+
+    return 0;
+}
+
+/* ========================================
+   函式名稱：gcd
+   功能：使用遞迴方式計算最大公因數
+   參數：
+     m - 第一個整數
+     n - 第二個整數
+   回傳值：m 和 n 的最大公因數
+
+   演算法：歐幾里得演算法 (遞迴實作)
+
+   遞迴原理說明：
+   1. 基底條件 (Base Case)：
+      當 n = 0 時，回傳 m
+      因為 GCD(m, 0) = m
+
+   2. 遞迴條件 (Recursive Case)：
+      GCD(m, n) = GCD(n, m mod n)
+      將問題轉換為更小的子問題
+
+   執行過程範例：計算 GCD(48, 18)
+
+   gcd(48, 18)
+   → gcd(18, 48 % 18)
+   → gcd(18, 12)
+   → gcd(12, 18 % 12)
+   → gcd(12, 6)
+   → gcd(6, 12 % 6)
+   → gcd(6, 0)
+   → 回傳 6
+
+   函式呼叫堆疊 (Call Stack) 說明：
+   gcd(48, 18) → 呼叫 gcd(18, 12)
+   gcd(18, 12) → 呼叫 gcd(12, 6)
+   gcd(12, 6)  → 呼叫 gcd(6, 0)
+   gcd(6, 0)   → 回傳 6 (基底條件)
+   gcd(12, 6)  → 回傳 6
+   gcd(18, 12) → 回傳 6
+   gcd(48, 18) → 回傳 6
+
+   為什麼這個演算法有效？
+   定理：GCD(m, n) = GCD(n, m mod n)
+   證明：
+   設 m = q×n + r，其中 r = m mod n
+   若 d 能整除 m 和 n，則：
+   - m = d×k₁ (k₁ 為整數)
+   - n = d×k₂ (k₂ 為整數)
+   - r = m - q×n = d×k₁ - q×d×k₂ = d×(k₁ - q×k₂)
+   因此 d 也能整除 r
+   反之亦然，所以 GCD(m, n) = GCD(n, r)
+
+   時間複雜度：O(log(min(m, n)))
+   空間複雜度：O(log(min(m, n))) - 遞迴呼叫堆疊
+
+   迴圈 vs 遞迴比較：
+   - 遞迴版本：程式碼非常簡潔，直接反映數學定義
+   - 迴圈版本：執行效率相同，但節省堆疊空間
+   ======================================== */
+int gcd(int m, int n) {
+    // 基底條件：當 n = 0 時，m 就是最大公因數
+    if(n == 0)
+        return m;
+    // 遞迴條件：GCD(m, n) = GCD(n, m mod n)
+    else
         return gcd(n, m % n);
 }
